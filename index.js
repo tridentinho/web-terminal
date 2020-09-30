@@ -18,6 +18,9 @@ var server = http.createServer(app).listen(3000, () => console.log("Servidor rod
 
 var io = require('socket.io').listen(server);
 
+var msg = Array();
+var msgCmd = Array();
+
 io.on('connection', (socket) => {
   console.log('Um usuario conectado: ' + socket.id);
   socket.on('disconnect', () => {
@@ -27,7 +30,11 @@ io.on('connection', (socket) => {
     console.log('Usuario ' + socket.id + ' executou o comando "' + cmd + '"');
     var resposta = shell.exec(cmd, {silent:true}).stdout;
     var rsp = {'cmd':cmd, 'rsp':resposta};
-    //console.log(resposta);
+    
+    if(rsp.rsp === ''){
+      rsp.rsp = 'Comando não encontrado ou sem resposta.';
+    }
+
     io.emit('resposta', rsp);
   });
 })

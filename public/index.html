@@ -15,15 +15,16 @@
 </head>
 
 <body class="col">
-    <textarea readonly="true" id="respostas"></textarea>
+    <textarea type="text" readonly="true" id="respostas"></textarea>
     <form>
-        <input type="text" id="comando" placeholder="Digite um comando do terminal"></input>
+        <a href="#" onclick="document.getElementById('comando').focus();return(false);"></a>
+        <input type="text" id="comando"></input>
         <button type="submit" id="btn">Executar</button>
     </form>
     <div class="footer col row">
         <div class="col">
             <p>
-                Desenvolvido por Eriqui Gavioli, Lucas Gulart e Vitor Prestes
+                Ⓒ Copyright Eriqui Gaviolli, Lucas Gulart e Vitor Prestes
             </p>
         </div>
         <div class="col">
@@ -40,12 +41,18 @@
                 socket.emit('comando', comando);
                 //console.log(comando);
                 e.preventDefault();
+                omando = document.getElementById('comando').value='';
                 return false;
+
             },
             false
         );
+
         socket.on('resposta', function (rsp) {
-            document.getElementById('respostas').value = '> ' + rsp.cmd + '\n\n' + rsp.rsp;
+            var respos = document.getElementById('respostas');
+            respos.value += '> ' + rsp.cmd + '\n' + rsp.rsp + '\n';
+            
+            respos.scrollTop = respos.scrollHeight;
         });
 
         var ajuda = document.getElementById('ajuda');
